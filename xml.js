@@ -46,31 +46,33 @@ function *walkUntil(node, parents, test, depth= parents.length- 1){
 
 	// walk through this level
 	let seen= node ? false : true
-	for( let i= 0; i< parent.length; ++i){
-		const sibling= parent[i]
+	for( let i= 0; i< parent.length; ){
+		const sibling= parent[ i]
+		let found= false
 		if( !seen){
 			// ignore results until we see `node`, they are "before"
 			seen= sibling=== node
+			++i
 			continue
 		}
 
 		if( test( sibling)){
 			// found target, yield & terminate successfully
 			yield sibling
-			return true
-		}
-
-		if( sibling.value){
+			found= true
+		}else if( sibling.value){
 			// a leaf along the way to finding our closing node
 			if( sibling.children){
 				throw new Error("unexpected node with value and children")
 			}
 			yield sibling
+		}else{
+			// at a non-leaf along the way to finding our terminator, yield what we find
+			found= yield* walkUntil(null, [ sibling], test)
+			// and if we found the terminator, terminate
 		}
+		delete parent[i]
 
-		// at a non-leaf along the way to finding our terminator, yield what we find
-		const found= yield* walkUntil(null, [sibling], test)
-		// and if we found the terminator, terminate
 		if( found){
 			return true
 		}
@@ -92,7 +94,7 @@ function xmlFlow( ast){
 		const closeTest= closeTests[ lastTag]
 
 		let values= []
-		for( let node of walkUntil( node, parents, closeTest) {
+		for( let node of walkUntil( node, parents, closeTest)) {
 			values.push( node.value)
 		}
 
