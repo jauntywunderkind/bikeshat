@@ -22,13 +22,17 @@
 		}
 	},
 	"dependencies": {
+		"mdast-util-mdx": "^0.1.1",
+		"micromark-extension-mdxjs": "^0.3.0",
 		"rehype-raw": "^5.1.0",
+		"remark-mdx": "^1.6.22",
 		"remark-parse": "^9.0.0",
 		"remark-rehype": "^8.0.0",
 		"remark-stringify": "^9.0.1",
 		"remark-util-heading-tracker": "^1.0.1",
 		"unified": "^9.2.1",
-		"unified-stream": "^1.0.6"
+		"unified-stream": "^1.0.6",
+		"unist-util-visit-parents": "^3.1.1"
 	},
 	"devDependencies": {
 		"rehype-stringify": "^8.0.0"
